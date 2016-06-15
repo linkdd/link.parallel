@@ -95,6 +95,8 @@ Get input data and pass it to the middleware:
 
 .. code-block:: python
 
+   from link.middleware.core import Middleware
+
    mapreduce = Middleware.get_middleware_by_uri(
        'mapreduce+ipython:///test/classify?mapcb=mymap&reducecb=myreduce'
    )

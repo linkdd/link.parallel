@@ -5,14 +5,20 @@ from b3j0f.task import gettask
 
 from link.parallel.driver import Driver
 from link.parallel.mapper import Mapper
-from link.parallel.store import PartitionStore
+from link.parallel.reducer import Reducer
 
 
 class MapReduceMiddleware(Middleware):
 
     __protocols__ = ['mapreduce']
 
-    def __init__(self, backend, mapcb=None, reducecb=None, *args, **kwargs):
+    def __init__(
+        self,
+        backend,
+        mapcb=None,
+        reducecb=None,
+        *args, **kwargs
+    ):
         super(MapReduceMiddleware, self).__init__(*args, **kwargs)
 
         if mapcb is None or reducecb is None:
@@ -30,15 +36,33 @@ class MapReduceMiddleware(Middleware):
         self._backend = backend
 
         if not callable(mapcb):
-            self.mapcb = gettask(mapcb)
-
+            mapcb = gettask(mapcb)
         if not callable(reducecb):
-            self.reducecb = gettask(reducecb)
+            reducecb = gettask(reducecb)
 
-        self._partitions = PartitionStore('_'.join(self.path))
+        self.mapcb = mapcb
+        self.reducecb = reducecb
+
+        self._stores = {}
 
     def __call__(self, inputs):
-        self._backend.map(Mapper(self._partitions, self.mapcb), inputs)
-        result = self._backend.map(self.reducecb, self._partitions.items())
-        self._partitions.clear()
+        self._backend.map(
+            Mapper('_'.join(self.path), self._stores, self.mapcb),
+            inputs
+        )
+
+        result = self._backend.map(
+            Reducer(self.reducecb),
+            self._stores.items()
+        )
+
+        for storename, store in self._stores.items():
+            for key in store:
+                del store[key]
+
+            store.disconnect()
+
+            del self._stores[storename]
+            del store
+
         return result
