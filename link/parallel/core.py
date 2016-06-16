@@ -10,6 +10,7 @@ from link.parallel.reducer import Reducer
 
 class MapReduceMiddleware(Middleware):
 
+    __constraints__ = [Driver]
     __protocols__ = ['mapreduce']
 
     def __init__(
@@ -24,13 +25,6 @@ class MapReduceMiddleware(Middleware):
         if mapcb is None or reducecb is None:
             raise TypeError(
                 'MapReduceMiddleware must have a map and a reduce callback'
-            )
-
-        if not isinstance(backend, Driver):
-            raise TypeError(
-                'Backend must be a Driver, got: {0}'.format(
-                    backend.__class__.__name__
-                )
             )
 
         self._backend = backend
