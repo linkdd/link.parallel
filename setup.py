@@ -17,7 +17,8 @@ REQUIREMENTS = [
     'link.middleware>=0.14',
     'link.kvstore>=0.6',
     'six>=1.10.0',
-    'ipython>=4.2.0'
+    'ipython>=4.2.0',
+    'dill>=0.2.5'
 ]
 
 CLASSIFIERS = [
