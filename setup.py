@@ -14,8 +14,8 @@ AUTHOR_EMAIL = 'david.jose.delassus@gmail.com'
 LICENSE = 'MIT'
 REQUIREMENTS = [
     'b3j0f.conf>=0.3.18',
-    'link.middleware>=0.13',
-    'link.kvstore>=0.5',
+    'link.middleware>=0.14',
+    'link.kvstore>=0.6',
     'six>=1.10.0',
     'ipython>=4.2.0'
 ]

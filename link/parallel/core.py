@@ -18,6 +18,7 @@ class MapReduceMiddleware(Middleware):
         backend,
         mapcb=None,
         reducecb=None,
+        store_uri=None,
         *args, **kwargs
     ):
         super(MapReduceMiddleware, self).__init__(*args, **kwargs)
@@ -31,32 +32,40 @@ class MapReduceMiddleware(Middleware):
 
         if not callable(mapcb):
             mapcb = gettask(mapcb)
+
         if not callable(reducecb):
             reducecb = gettask(reducecb)
 
         self.mapcb = mapcb
         self.reducecb = reducecb
+        self.store_uri = store_uri
 
-        self._stores = {}
+        self._store = Middleware.get_middleware_by_uri(self.store_uri)
+
+    def reduced_keys(self):
+        keys = set()
+
+        for key in self._store:
+            realkey, _ = self._store[key]
+            keys.add(realkey)
+
+        return keys
 
     def __call__(self, inputs):
         self._backend.map(
-            Mapper('_'.join(self.path), self._stores, self.mapcb),
+            Mapper('_'.join(self.path), self.store_uri, self.mapcb),
             inputs
         )
 
         result = self._backend.map(
-            Reducer(self.reducecb),
-            self._stores.items()
+            Reducer(self.store_uri, self.reducecb),
+            self.reduced_keys()
         )
 
-        for storename, store in self._stores.items():
-            for key in store:
-                del store[key]
-
-            store.disconnect()
-
-            del self._stores[storename]
-            del store
+        for key in self._store:
+            del self._store[key]
 
         return result
+
+    def __del__(self):
+        self._store.disconnect()
