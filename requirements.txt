@@ -1,6 +1,6 @@
 b3j0f.conf==0.3.18
-link.middleware==0.14
-link.kvstore==0.6
+link.middleware==1.1
+link.kvstore==0.9
 six==1.10.0
-ipython==4.2.0
+ipython==5.0.0
 dill==0.2.5

@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
+from link.middleware.core import register_middleware
 from link.parallel.driver import Driver
 
 from IPython.parallel import Client
 
 
+@register_middleware
 class IPythonDriver(Driver):
 
     __protocols__ = ['ipython']

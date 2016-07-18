@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from link.middleware.core import register_middleware
 from link.parallel.driver import Driver
 
 from multiprocessing import Pool, cpu_count
-
 import dill
 
 
@@ -12,6 +12,7 @@ def handler(packet):
     return callback(inputdata)
 
 
+@register_middleware
 class MultiProcessingDriver(Driver):
 
     __protocols__ = ['multiprocessing']
