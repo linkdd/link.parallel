@@ -17,7 +17,7 @@ REQUIREMENTS = [
     'link.middleware>=1.4',
     'link.kvstore>=0.10',
     'six>=1.10.0',
-    'ipython>=5.0.0',
+    'ipython[parallel]>=5.0.0',
     'dill>=0.2.5'
 ]
 
