@@ -10,15 +10,21 @@ class Reducer(object):
         self.store_uri = store_uri
         self.callback = callback
 
-    def receive(self, expectedkey):
-        for key in self.store:
-            realkey, val = self.store[key]
-
-            if realkey == expectedkey:
-                yield val
-
     def __call__(self, key):
-        self.store = Middleware.get_middleware_by_uri(self.store_uri)
-        result = self.callback(self, key, self.receive(key))
-        self.store.disconnect()
-        return result
+        store = Middleware.get_middleware_by_uri(self.store_uri)
+        values = []
+
+        for local_key in store:
+            try:
+                realkey, val = store[local_key]
+
+                if realkey == key:
+                    values.append(val)
+
+            except KeyError:
+                pass
+
+        store.disconnect()
+
+        return self.callback(self, key, values)
+

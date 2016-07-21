@@ -17,18 +17,23 @@ class MapReduceMiddleware(Middleware):
         super(MapReduceMiddleware, self).__init__(*args, **kwargs)
 
         self.store_uri = store_uri
-        self._store = Middleware.get_middleware_by_uri(self.store_uri)
 
-    def reduced_keys(self):
+    def reduced_keys(self, store):
         keys = set()
 
-        for key in self._store:
-            realkey, _ = self._store[key]
-            keys.add(realkey)
+        for key in store:
+            try:
+                realkey, _ = store[key]
+                keys.add(realkey)
+
+            except KeyError:
+                pass
 
         return keys
 
     def __call__(self, mapper, reducer, inputs):
+        store = Middleware.get_middleware_by_uri(self.store_uri)
+
         self.get_child_middleware().map(
             Mapper('_'.join(self.path), self.store_uri, mapper),
             inputs
@@ -36,14 +41,16 @@ class MapReduceMiddleware(Middleware):
 
         result = self.get_child_middleware().map(
             Reducer(self.store_uri, reducer),
-            self.reduced_keys()
+            self.reduced_keys(store)
         )
 
-        for key in self._store:
-            print(key)
-            del self._store[key]
+        for key in store:
+            try:
+                del store[key]
+
+            except KeyError:
+                pass
+
+        store.disconnect()
 
         return result
-
-    def __del__(self):
-        self._store.disconnect()
