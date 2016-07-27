@@ -27,4 +27,3 @@ class Reducer(object):
         store.disconnect()
 
         return self.callback(self, key, values)
-

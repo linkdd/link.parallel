@@ -3,7 +3,7 @@
 from link.middleware.core import register_middleware
 from link.parallel.driver import Driver
 
-from IPython.parallel import Client
+from ipyparallel import Client
 
 
 @register_middleware
