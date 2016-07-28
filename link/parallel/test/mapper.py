@@ -9,7 +9,7 @@ from link.parallel.mapper import Mapper
 
 class DummyStore(dict):
     def disconnect(self):
-        pass
+        raise NotImplementedError()
 
 
 class TestMapper(UTCase):

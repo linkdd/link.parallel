@@ -9,7 +9,13 @@ from link.parallel.reducer import Reducer
 
 class DummyStore(dict):
     def disconnect(self):
-        pass
+        raise NotImplementedError()
+
+    def __getitem__(self, key):
+        if key == 'error':
+            raise KeyError(key)
+
+        return super(DummyStore, self).__getitem__(key)
 
 
 class TestReducer(UTCase):
@@ -35,13 +41,15 @@ class TestReducer(UTCase):
         self.store['some key 2'] = ('KEY', 'VAL2')
         self.store['some key 3'] = ('KEY', 'VAL3')
         self.store['some key 4'] = ('KEY', 'VAL4')
+        self.store['error'] = None
 
         key = 'KEY'
 
         values = []
 
         for lkey in self.store:
-            values.append(self.store[lkey][1])
+            if lkey != 'error':
+                values.append(self.store[lkey][1])
 
         result = self.reducer(key)
 
