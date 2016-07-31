@@ -28,7 +28,7 @@ See documentation_ for more informations.
    :alt: Supported Python implementations
 
 .. image:: https://img.shields.io/pypi/wheel/link.parallel.svg?style=flat-square
-   :target: https://travis-ci.org/linkdd/link.parallel
+   :target: https://pypi.python.org/pypi/link.parallel
    :alt: Download format
 
 .. image:: https://travis-ci.org/linkdd/link.parallel.svg?branch=master&style=flat-square
@@ -105,3 +105,10 @@ Get input data and pass it to the middleware:
    result = dict(mapreduce(items))
 
    print(result)
+
+Donating
+--------
+
+.. image:: https://cdn.rawgit.com/gratipay/gratipay-badge/2.3.0/dist/gratipay.svg
+   :target: https://gratipay.com/~linkdd/
+   :alt: Support via Gratipay
