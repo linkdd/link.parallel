@@ -5,12 +5,13 @@ from uuid import uuid4
 
 
 class Mapper(object):
-    def __init__(self, prefix, store_uri, callback, *args, **kwargs):
+    def __init__(self, identifier, prefix, store_uri, cb, *args, **kwargs):
         super(Mapper, self).__init__(*args, **kwargs)
 
+        self.identifier = identifier
         self.prefix = prefix
         self.store_uri = store_uri
-        self.callback = callback
+        self.callback = cb
 
     def emit(self, key, value):
         h = '{0}_{1}_{2}'.format(
@@ -19,7 +20,7 @@ class Mapper(object):
             key
         )
 
-        self.store[h] = (key, value)
+        self.store[h] = (self.identifier, key, value)
 
     def __call__(self, data):
         self.store = Middleware.get_middleware_by_uri(self.store_uri)

@@ -34,7 +34,7 @@ class TestMapper(UTCase):
         self.callback = MagicMock()
 
         self.uuid4.configure_mock(return_value=self.uuid)
-        self.mapper = Mapper(self.prefix, self.store_uri, self.callback)
+        self.mapper = Mapper('id1', self.prefix, self.store_uri, self.callback)
 
     def test_emit(self):
         self.mapper.store = self.store
@@ -44,7 +44,7 @@ class TestMapper(UTCase):
         expected = '{0}_{1}_KEY'.format(self.uuid, self.prefix)
 
         self.assertIn(expected, self.store)
-        self.assertEqual(self.store[expected], ('KEY', 'VALUE'))
+        self.assertEqual(self.store[expected], ('id1', 'KEY', 'VALUE'))
 
     def test_call(self):
         data = 'DATA'

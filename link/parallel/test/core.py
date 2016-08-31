@@ -46,15 +46,17 @@ class TestCore(UTCase):
         self.store = DummyStore()
         self.store.disconnect = MagicMock()
 
-        self.store['some key 1'] = ('key1', 'VAL1')
-        self.store['some key 2'] = ('key1', 'VAL2')
-        self.store['some key 3'] = ('key1', 'VAL3')
-        self.store['some key 4'] = ('key1', 'VAL4')
+        self.store['some key 1'] = ('id1', 'key1', 'VAL1')
+        self.store['some key 2'] = ('id1', 'key1', 'VAL2')
+        self.store['some key 3'] = ('id1', 'key1', 'VAL3')
+        self.store['some key 4'] = ('id1', 'key1', 'VAL4')
         self.store['error'] = None
-        self.store['some key 5'] = ('key2', 'VAL1')
-        self.store['some key 6'] = ('key2', 'VAL2')
-        self.store['some key 7'] = ('key2', 'VAL3')
-        self.store['some key 8'] = ('key2', 'VAL4')
+        self.store['some key 5'] = ('id1', 'key2', 'VAL1')
+        self.store['some key 6'] = ('id1', 'key2', 'VAL2')
+        self.store['some key 7'] = ('id1', 'key2', 'VAL3')
+        self.store['some key 8'] = ('id1', 'key2', 'VAL4')
+
+        self.store['some key 9'] = ('id2', 'key3', 'VAL1')
 
         patcher1 = patch('link.parallel.core.Middleware')
         patcher2 = patch('link.parallel.core.Mapper')
@@ -95,7 +97,7 @@ class TestCore(UTCase):
 
         self.mid.reduced_keys = MagicMock(return_value=reduced_keys)
 
-        result = self.mid(mapper, reducer, inputs)
+        result = self.mid('id1', mapper, reducer, inputs)
 
         self.assertEqual(result, expected)
         self.midcls.get_middleware_by_uri.assert_called_with(self.store_uri)
@@ -110,10 +112,15 @@ class TestCore(UTCase):
         self.assertEqual(mapperkwargs, {})
 
         self.assertIsInstance(mapperargs[0], Mapper)
-        self.mapcls.assert_called_with('test_mr', self.store_uri, mapper)
+        self.mapcls.assert_called_with(
+            'id1',
+            'test_mr',
+            self.store_uri,
+            mapper
+        )
         self.assertEqual(mapperargs[1], inputs)
 
-        self.mid.reduced_keys.assert_called_with(self.store)
+        self.mid.reduced_keys.assert_called_with('id1', self.store)
 
         reducercall = drv.map.call_args_list[1]
         reducerargs, reducerkwargs = reducercall
@@ -122,15 +129,15 @@ class TestCore(UTCase):
         self.assertEqual(reducerkwargs, {})
 
         self.assertIsInstance(reducerargs[0], Reducer)
-        self.reducecls.assert_called_with(self.store_uri, reducer)
+        self.reducecls.assert_called_with('id1', self.store_uri, reducer)
         self.assertEqual(reducerargs[1], reduced_keys)
 
         keys = self.store.keys()
 
-        self.assertEqual(keys, ['error'])
+        self.assertEqual(keys, ['some key 9', 'error'])
 
     def test_reduced_keys(self):
-        result = self.mid.reduced_keys(self.store)
+        result = self.mid.reduced_keys('id1', self.store)
 
         self.assertEqual(result, set(['key1', 'key2']))
 

@@ -4,9 +4,10 @@ from link.middleware.core import Middleware
 
 
 class Reducer(object):
-    def __init__(self, store_uri, callback, *args, **kwargs):
+    def __init__(self, identifier, store_uri, callback, *args, **kwargs):
         super(Reducer, self).__init__(*args, **kwargs)
 
+        self.identifier = identifier
         self.store_uri = store_uri
         self.callback = callback
 
@@ -16,9 +17,9 @@ class Reducer(object):
 
         for local_key in store:
             try:
-                realkey, val = store[local_key]
+                keyid, realkey, val = store[local_key]
 
-                if realkey == key:
+                if keyid == self.identifier and realkey == key:
                     values.append(val)
 
             except KeyError:
