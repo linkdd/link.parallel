@@ -134,7 +134,7 @@ class TestCore(UTCase):
 
         keys = self.store.keys()
 
-        self.assertEqual(keys, ['some key 9', 'error'])
+        self.assertItemsEqual(keys, ['some key 9', 'error'])
 
     def test_reduced_keys(self):
         result = self.mid.reduced_keys('id1', self.store)
