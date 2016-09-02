@@ -47,10 +47,6 @@ See documentation_ for more informations.
    :target: https://landscape.io/github/linkdd/link.parallel/master
    :alt: Code Health
 
-.. image:: https://www.quantifiedcode.com/api/v1/project/4cc042fb351e44228a67fc7d6835ae6b/badge.svg
-  :target: https://www.quantifiedcode.com/app/project/4cc042fb351e44228a67fc7d6835ae6b
-  :alt: Code issues
-
 Installation
 ------------
 
@@ -109,6 +105,6 @@ Get input data and pass it to the middleware:
 Donating
 --------
 
-.. image:: https://cdn.rawgit.com/gratipay/gratipay-badge/2.3.0/dist/gratipay.svg
-   :target: https://gratipay.com/~linkdd/
-   :alt: Support via Gratipay
+.. image:: https://liberapay.com/assets/widgets/donate.svg
+   :target: https://liberapay.com/linkdd/donate
+   :alt: Support via Liberapay
