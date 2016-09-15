@@ -21,12 +21,15 @@ class TestIPythonDriver(UTCase):
         self.callback = lambda doc: doc
         self.expected = [1, 2, 3, 4]
 
-        self.drv._view.map = MagicMock(return_value=self.expected)
+        self.drv._view.map_sync = MagicMock(return_value=self.expected)
 
     def test_map(self):
         result = list(self.drv.map(self.callback, self.expected))
 
-        self.drv._view.map.assert_called_with(self.callback, self.expected)
+        self.drv._view.map_sync.assert_called_with(
+            self.callback,
+            self.expected
+        )
         self.assertEqual(result, self.expected)
 
 
