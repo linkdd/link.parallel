@@ -1,0 +1,18 @@
+[
+    {"key": "foo", "value": 1},
+    {"key": "foo", "value": 1},
+    {"key": "foo", "value": 1},
+    {"key": "foo", "value": 1},
+    {"key": "foo", "value": 1},
+    {"key": "foo", "value": 1},
+    {"key": "foo", "value": 1},
+    {"key": "foo", "value": 1},
+    {"key": "bar", "value": 2},
+    {"key": "bar", "value": 2},
+    {"key": "bar", "value": 2},
+    {"key": "bar", "value": 2},
+    {"key": "bar", "value": 2},
+    {"key": "bar", "value": 2},
+    {"key": "foo", "value": 3},
+    {"key": "foo", "value": 3}
+]

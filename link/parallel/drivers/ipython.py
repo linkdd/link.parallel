@@ -18,4 +18,4 @@ class IPythonDriver(Driver):
         self._view = self._client[:]
 
     def map(self, callback, inputs):
-        return self._view.map(callback, inputs)
+        return self._view.map_sync(callback, inputs)
